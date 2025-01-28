@@ -86,7 +86,7 @@ Keypad keypad = Keypad(makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_N
 
 int sd_ok;
 
-int main_menu_select = 4;
+int main_menu_select = 1;
 int change_menu = 1;
 int menu_select;
 int main_menu_ = 1;
@@ -110,17 +110,25 @@ int m4;
 int zero;
 int start_;
 int stop_;
+int start;
 
+int change1;
+int change2;
+int change3;
+int change4;
+int change5;
 ///**************pwm***************
 const int pwmPin = 15;        // پین خروجی PWM (پین موردنظر خود را وارد کنید)
 const int pwmChannel = 0;     // کانال PWM (می‌توانید از 0 تا 15 انتخاب کنید)
 const int pwmResolution = 8;  // رزولوشن PWM (بیت‌ها: 8 بیت = 0-255)
 int frequency = 50;           // فرکانس اولیه PWM (برحسب هرتز)
-int dutyCycle = 10;           // دیوتی سایکل اولیه (50% از 0-255)
+int dutyCycle = 70;           // دیوتی سایکل اولیه (50% از 0-255)
 int frequency1;
 int dutyCycle1;
 
 
+int adc_in;
+float voltage_avg2;
 //oskop
 // تنظیمات ورودی سیگنال
 const int analogPin = 35;     // پین ADC
