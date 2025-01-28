@@ -70,20 +70,46 @@ unsigned long total = 0;
 unsigned long tn = 0;
 
 
+//**********keypad*********
+#include <Keypad.h>
+#define ROW_NUM 4     // four rows
+#define COLUMN_NUM 3  // three columns
+char keys[ROW_NUM][COLUMN_NUM] = {
+  { '1', '2', '3' },
+  { '4', '5', '6' },
+  { '7', '8', '9' },
+  { '*', '0', '#' }
+};
+byte pin_rows[ROW_NUM] = { 22, 21, 5, 16 };                                           // GPIO18, GPIO5, GPIO17, GPIO16 connect to the row pins
+byte pin_column[COLUMN_NUM] = { 27, 14, 12 };                                         // GPIO4, GPIO0, GPIO2 connect to the column pins
+Keypad keypad = Keypad(makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM);  //salam
 
 int sd_ok;
 
-int main_menu_select = 1;
+int main_menu_select = 4;
 int change_menu = 1;
 int menu_select;
 int main_menu_ = 1;
 
 
-int k_up = 17;
-int k_down = 16;
-int k_right = 13;
-int k_left = 12;
-int k_ok = 5;
+int buzzer = 17;
+// int k_down = 16;
+// int k_right = 13;
+// int k_left = 12;
+// int k_ok = 5;
+
+int up_;
+int down_;
+int left_;
+int right_;
+int ok_;
+int m1;
+int m2;
+int m3;
+int m4;
+int zero;
+int start_;
+int stop_;
 
 ///**************pwm***************
 const int pwmPin = 15;        // پین خروجی PWM (پین موردنظر خود را وارد کنید)
@@ -91,15 +117,45 @@ const int pwmChannel = 0;     // کانال PWM (می‌توانید از 0 تا
 const int pwmResolution = 8;  // رزولوشن PWM (بیت‌ها: 8 بیت = 0-255)
 int frequency = 50;           // فرکانس اولیه PWM (برحسب هرتز)
 int dutyCycle = 10;           // دیوتی سایکل اولیه (50% از 0-255)
+int frequency1;
+int dutyCycle1;
+
+
+//oskop
+// تنظیمات ورودی سیگنال
+const int analogPin = 35;     // پین ADC
+int sampleSize = 700;  // تعداد نمونه‌ها (یک خط کامل نمایشگر)
+uint16_t samples[2000];
+uint16_t lastSamples[2000];  // ذخیره مقادیر قبلی موج
+// مقیاس ولتاژ
+float voltageScale = 3.3 / 4095.0;
+int threshold = 1;  //200 آستانه برای تشخیص لبه2048
+// متغیرهای فرکانس
+volatile unsigned long lastEdgeTime = 0;
+volatile float frequency_ = 0;
+long debounceTime = 200;  // حداقل فاصله زمانی بین دو لبه (بر حسب میکروثانیه)
+// اندازه بخش مشخصات سیگنال
+const int signalInfoHeight = 50;
+int test_voltage;
+float readv;
+int freqFult;
+int show_fail;
+int volt_cout;
+float voltage_avg;
+float signal_calib = 1;
 
 void setup() {
   Serial.begin(115200);
 
-  pinMode(k_up, INPUT_PULLUP);
-  pinMode(k_down, INPUT_PULLUP);
-  pinMode(k_right, INPUT_PULLUP);
-  pinMode(k_left, INPUT_PULLUP);
-  pinMode(k_ok, INPUT_PULLUP);
+  pinMode(buzzer, OUTPUT);
+
+  digitalWrite(buzzer, HIGH);
+  delay(100);
+  digitalWrite(buzzer, LOW);
+  delay(100);
+  digitalWrite(buzzer, HIGH);
+  delay(200);
+  digitalWrite(buzzer, LOW);
 
   tft.begin();
   tft.setRotation(3); /* Landscape orientation, flipped */ /* TFT init */
@@ -110,10 +166,10 @@ void setup() {
   }
 
   tft.fillScreen(TFT_BLACK);
-    sd_ok = 1;
+  sd_ok = 1;
   tft.fillScreen(TFT_BLACK);
-  tft.drawJpgFile(SD, "/start_logo.jpg", 0, 0);
-  delay(1000);
+  // tft.drawJpgFile(SD, "/start_logo.jpg", 0, 0);
+  //delay(5000);
   tft.fillScreen(TFT_BLACK);
 
   Serial.println("ُstart program");
@@ -125,10 +181,18 @@ void setup() {
   // مقدار اولیه دیوتی سایکل
   ledcWrite(pwmChannel, dutyCycle);
   Serial.println("Ready to control frequency and duty cycle.");
+
+  //oskop
+  analogReadResolution(12);        // رزولوشن 12 بیت
+  analogSetAttenuation(ADC_11db);  // افزایش محدوده ولتاژ ADC
+                                   //attachInterrupt(analogPin, calculatefrequency_, RISING);
+
+  tft.drawJpgFile(SD, "/main_menu.jpg", 0, 0);
 }
 
 void loop() {
 
   if (main_menu_ == 1) main_menu();
   if (main_menu_ == 0) select_menu();
+ 
 }
