@@ -7,4 +7,5 @@ void select_menu() {
   if (menu_select == 3) dynam_test();
   if (menu_select == 4) oskop();
   if (menu_select == 5) tes_boq();
+   if (menu_select == 6) ohmetr();
 }

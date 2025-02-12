@@ -2,13 +2,44 @@
 
 
 void selenoeid_tester() {
+
+  adc_in = 0;
+  for (int i = 0; i < 100; i++) {
+    adc_in += analogRead(26);
+    delay(1);
+  }
+  voltage_avg2 = adc_in / 100;
+
+  //voltage_avg2 /= 3.1;
+  voltage_avg2 -= 1800;
+  voltage_avg2 /= 125;
+
+  // float adc_voltage = voltage_avg2 * (3.3 / 4096.0);
+  // float current_voltage = adc_voltage;
+  // float current = (current_voltage - 2.5) / 0.100;
+  Serial.print("Current Value: ");
+  Serial.println(voltage_avg2);
+
+  tft.setTextFont(1);
+  tft.setTextSize(2);
+  tft.setTextColor(TFT_BLUE, TFT_BLACK);
+  tft.fillRoundRect(90, 285, 99, 23, 15, TFT_BLACK);
+  tft.setCursor(103, 289);
+  tft.printf("%.2f A", voltage_avg2);
+
   keypad_();
-  if (ok_ == 1) {
+  if (stop_ == 1) {
+    digitalWrite(rele1, LOW);
+    digitalWrite(rele2, LOW);
+    digitalWrite(rele3, LOW);
+    ledcWrite(pwmChannel, 0);
+    ledcSetup(pwmChannel, 0, pwmResolution);
+    digitalWrite(15, 0);
     digitalWrite(buzzer, HIGH);
     delay(50);
     digitalWrite(buzzer, LOW);
     tft.fillScreen(TFT_BLACK);
-    tft.drawJpgFile(SD, "/main_menu.jpg", 0, 0);
+    tft.drawJpgFile(SD, "/main_menu2.jpg", 0, 0);
     change_menu = 1;
     main_menu_ = 1;
   }

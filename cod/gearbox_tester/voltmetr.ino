@@ -13,8 +13,10 @@ int d = 0;
 
 
 void voltmetr() {
-
-
+  digitalWrite(rele1, LOW);
+  digitalWrite(rele2, LOW);
+  ledcWrite(pwmChannel, 255);
+  ledcSetup(pwmChannel, 5000, pwmResolution);
   if (start == 0) {
     start = 1;
     analogMeter();  // Draw analogue meter
@@ -61,12 +63,15 @@ void voltmetr() {
   keypad_();
 
 
-  if (ok_ == 1) {
+  if (stop_ == 1) {
+    digitalWrite(rele3, LOW);
+    ledcWrite(pwmChannel, 0);
+    ledcSetup(pwmChannel, 0, pwmResolution);
     digitalWrite(buzzer, HIGH);
     delay(50);
     digitalWrite(buzzer, LOW);
     tft.fillScreen(TFT_BLACK);
-    tft.drawJpgFile(SD, "/main_menu.jpg", 0, 0);
+    tft.drawJpgFile(SD, "/main_menu2.jpg", 0, 0);
     change_menu = 1;
     main_menu_ = 1;
   }
@@ -107,8 +112,8 @@ void analogMeter() {
 
     // Yellow zone limits
     if (i >= -50 && i < 0) {
-     tft.fillTriangle(x0, y0, x1, y1, x2, y2, TFT_GREEN);
-     tft.fillTriangle(x1, y1, x2, y2, x3, y3, TFT_GREEN);
+      tft.fillTriangle(x0, y0, x1, y1, x2, y2, TFT_GREEN);
+      tft.fillTriangle(x1, y1, x2, y2, x3, y3, TFT_GREEN);
     }
 
     // Green zone limits

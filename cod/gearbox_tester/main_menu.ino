@@ -40,7 +40,12 @@ void main_menu() {
     delay(100);
     digitalWrite(buzzer, LOW);
     menu_select = main_menu_select;
-    if (menu_select == 1) {
+    if (menu_select == 1) {  //selonoeid
+      digitalWrite(rele1, HIGH);
+      digitalWrite(rele2, LOW);
+      ledcWrite(pwmChannel, dutyCycle);
+      ledcSetup(pwmChannel, frequency, pwmResolution);
+
       tft.fillScreen(TFT_BLACK);
       tft.drawJpgFile(SD, "/selonoeid.jpg", 0, 0);
 
@@ -75,7 +80,12 @@ void main_menu() {
       tft.println(s1);
     }
 
-    if (menu_select == 2) {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (menu_select == 2) {  //voltmetr
+      digitalWrite(rele1, LOW);
+      digitalWrite(rele2, LOW);
+      ledcWrite(pwmChannel, 255);
+      ledcSetup(pwmChannel, 5000, pwmResolution);
       start = 0;
       tft.fillScreen(TFT_BLACK);
       main_menu_ = 0;
@@ -83,7 +93,11 @@ void main_menu() {
       tft.drawJpgFile(SD, "/kadr.jpg", 0, 0);
     }
 
-    if (menu_select == 3) {
+    if (menu_select == 3) {  //dynam
+      digitalWrite(rele1, LOW);
+      digitalWrite(rele2, LOW);
+      ledcWrite(pwmChannel, 255);
+      ledcSetup(pwmChannel, 5000, pwmResolution);
       tft.fillScreen(TFT_BLACK);
       main_menu_ = 0;
       change_menu = 0;
@@ -95,8 +109,12 @@ void main_menu() {
       tft.drawJpgFile(SD, "/DYNAM.jpg", 0, 0);
     }
 
-
-    if (menu_select == 4) {
+    ///////////////////////////////////////////////////////////////////////////////
+    if (menu_select == 4) {  //oskop
+      digitalWrite(rele1, LOW);
+      digitalWrite(rele2, LOW);
+      ledcWrite(pwmChannel, 255);
+      ledcSetup(pwmChannel, 5000, pwmResolution);
       tft.fillScreen(TFT_BLACK);
       main_menu_ = 0;
       change_menu = 0;
@@ -112,7 +130,12 @@ void main_menu() {
       tft.drawJpgFile(SD, "/oskop_signal.jpg", 0, 0);
     }
 
-    if (menu_select == 5) {
+    /////////////////////////////////////////////////////////////////////////////////////////
+    if (menu_select == 5) {  //test boq
+      digitalWrite(rele1, LOW);
+      digitalWrite(rele2, HIGH);
+      ledcWrite(pwmChannel, 255);
+      ledcSetup(pwmChannel, 5000, pwmResolution);
       tft.fillScreen(TFT_BLACK);
       main_menu_ = 0;
       change_menu = 0;

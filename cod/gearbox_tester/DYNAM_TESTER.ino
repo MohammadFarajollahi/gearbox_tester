@@ -30,7 +30,7 @@ void dynam_test() {
   tft.setCursor(150, 274);
   tft.printf("%.2fV", voltage_avg2);
 
-  if (voltage_avg2 < 5 && change5 == 0) {  // خاموش
+  if (voltage_avg2 < 5 && change5 == 0) {  // qaat
     change1 = 1;
     change2 = 0;
     change3 = 0;
@@ -39,7 +39,7 @@ void dynam_test() {
     tft.drawJpgFile(SD, "/sim_qat.jpg", 10, 80);
   }
 
-  if (voltage_avg2 < 12.9 && change1 == 0) {  // خاموش
+  if (voltage_avg2 < 12.9 && voltage_avg2 >= 9 && change1 == 0) {  // خاموش
     change1 = 1;
     change2 = 0;
     change3 = 0;
@@ -78,12 +78,18 @@ void dynam_test() {
   }
 
   keypad_();
-  if (ok_ == 1) {
+  if (stop_ == 1) {
+    digitalWrite(rele1, LOW);
+    digitalWrite(rele2, LOW);
+    digitalWrite(rele3, LOW);
+    ledcWrite(pwmChannel, 0);
+    ledcSetup(pwmChannel, 0, pwmResolution);
+    digitalWrite(15, 0);
     digitalWrite(buzzer, HIGH);
     delay(50);
     digitalWrite(buzzer, LOW);
     tft.fillScreen(TFT_BLACK);
-    tft.drawJpgFile(SD, "/main_menu.jpg", 0, 0);
+    tft.drawJpgFile(SD, "/main_menu2.jpg", 0, 0);
     change_menu = 1;
     main_menu_ = 1;
   }

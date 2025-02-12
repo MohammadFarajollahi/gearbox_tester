@@ -131,8 +131,8 @@ int adc_in;
 float voltage_avg2;
 //oskop
 // تنظیمات ورودی سیگنال
-const int analogPin = 35;     // پین ADC
-int sampleSize = 700;  // تعداد نمونه‌ها (یک خط کامل نمایشگر)
+const int analogPin = 35;  // پین ADC
+int sampleSize = 700;      // تعداد نمونه‌ها (یک خط کامل نمایشگر)
 uint16_t samples[2000];
 uint16_t lastSamples[2000];  // ذخیره مقادیر قبلی موج
 // مقیاس ولتاژ
@@ -152,10 +152,30 @@ int volt_cout;
 float voltage_avg;
 float signal_calib = 1;
 
+int rele1 = 25;
+int rele2 = 33;
+int rele3 = 13;
+
+int alarm_ohm;
+
+int start_ohm;
+int mini_ohm;
+int alarm_show;
+
 void setup() {
   Serial.begin(115200);
 
   pinMode(buzzer, OUTPUT);
+  pinMode(rele1, OUTPUT);
+  pinMode(rele2, OUTPUT);
+  pinMode(rele3, OUTPUT);
+
+
+  digitalWrite(rele1, LOW);
+  digitalWrite(rele2, LOW);
+  digitalWrite(rele3, LOW);
+
+
 
   digitalWrite(buzzer, HIGH);
   delay(100);
@@ -195,12 +215,14 @@ void setup() {
   analogSetAttenuation(ADC_11db);  // افزایش محدوده ولتاژ ADC
                                    //attachInterrupt(analogPin, calculatefrequency_, RISING);
 
-  tft.drawJpgFile(SD, "/main_menu.jpg", 0, 0);
+  tft.drawJpgFile(SD, "/main_menu2.jpg", 0, 0);
+
+  ledcWrite(pwmChannel, 0);
+  ledcSetup(pwmChannel, 0, pwmResolution);
 }
 
 void loop() {
 
-  if (main_menu_ == 1) main_menu();
+  if (main_menu_ == 1) main_menu2();
   if (main_menu_ == 0) select_menu();
- 
 }
