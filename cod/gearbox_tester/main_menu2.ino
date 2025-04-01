@@ -1,4 +1,6 @@
 void main_menu2() {
+
+  readBattery();
   char key = keypad.getKey();
 
   if (key) {
@@ -45,6 +47,15 @@ void main_menu2() {
       tft.setCursor(359, 289);
       s1 = "12.1 V";
       tft.println(s1);
+
+      for (int i = 0; i < 4; i++) {
+        pinMode(rowPins[i], INPUT_PULLUP);
+      }
+
+      for (int i = 0; i < 3; i++) {
+        pinMode(colPins[i], OUTPUT);
+        digitalWrite(colPins[i], HIGH);  // فرض می‌کنیم که وقتی این پین‌ها HIGH باشند، دکمه فعال است.
+      }
     }
     /////////////////////////////////////////////////////////////////////
     if (key == '2') {  //voltmetr
@@ -115,9 +126,9 @@ void main_menu2() {
     }
     /////////////////////////////////////////////////////////////////////
     if (key == '6') {  //ohm
-    start_ohm = 0;
-    alarm_ohm = 0;
-    alarm_show = 0;
+      start_ohm = 0;
+      alarm_ohm = 0;
+      alarm_show = 0;
       check();
       if (alarm_ohm == 0) {
         // tft.fillScreen(TFT_BLACK);

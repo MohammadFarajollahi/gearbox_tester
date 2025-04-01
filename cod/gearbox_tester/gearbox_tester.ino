@@ -72,6 +72,7 @@ unsigned long tn = 0;
 
 //**********keypad*********
 #include <Keypad.h>
+#include <Bounce2.h>
 #define ROW_NUM 4     // four rows
 #define COLUMN_NUM 3  // three columns
 char keys[ROW_NUM][COLUMN_NUM] = {
@@ -83,6 +84,31 @@ char keys[ROW_NUM][COLUMN_NUM] = {
 byte pin_rows[ROW_NUM] = { 22, 21, 5, 16 };                                           // GPIO18, GPIO5, GPIO17, GPIO16 connect to the row pins
 byte pin_column[COLUMN_NUM] = { 27, 14, 12 };                                         // GPIO4, GPIO0, GPIO2 connect to the column pins
 Keypad keypad = Keypad(makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM);  //salam
+
+///////////////////////////////////////////////////////////////
+// پین‌های ردیف‌ها و ستون‌ها
+const int rowPins[4] = { 22, 21, 5, 16 };  // ردیف‌ها
+const int colPins[3] = { 27, 14, 12 };     // ستون‌ها
+
+// تعریف دکمه‌های صفحه‌کلید
+char keys2[4][3] = {
+  { '1', '2', '3' },
+  { '4', '5', '6' },
+  { '7', '8', '9' },
+  { '*', '0', '#' }
+};
+
+// شمارنده
+int counter = 0;
+
+// وضعیت دکمه‌ها
+bool keyPressed = false;
+unsigned long lastPressTime = 0;
+unsigned long repeatInterval = 50;
+
+
+
+////////////////////////////////////////////////////////////////
 
 int sd_ok;
 
@@ -162,6 +188,10 @@ int start_ohm;
 int mini_ohm;
 int alarm_show;
 
+int BattAdc;
+int battaryVoltage;
+int readB = 10000;
+
 void setup() {
   Serial.begin(115200);
 
@@ -215,10 +245,32 @@ void setup() {
   analogSetAttenuation(ADC_11db);  // افزایش محدوده ولتاژ ADC
                                    //attachInterrupt(analogPin, calculatefrequency_, RISING);
 
+  char key = keypad.getKey();
+
+  if (key) {
+    if (key == '*') {
+      tft.drawJpgFile(SD, "/bio.jpg", 0, 0);
+
+      while (1) {
+        char key = keypad.getKey();
+        if (key) {
+          if (key == '#') {
+            break;
+          }
+        }
+      }
+    }
+  }
+  tft.fillScreen(TFT_BLACK);
   tft.drawJpgFile(SD, "/main_menu2.jpg", 0, 0);
 
   ledcWrite(pwmChannel, 0);
   ledcSetup(pwmChannel, 0, pwmResolution);
+
+
+
+  /////////////
+  // تنظیم پین‌ها به عنوان ورودی با کشش بالا برای ردیف‌ها و ستون‌ها
 }
 
 void loop() {

@@ -30,8 +30,8 @@ void dynam_test() {
   tft.setCursor(150, 274);
   tft.printf("%.2fV", voltage_avg2);
 
-  if (voltage_avg2 < 5 && change5 == 0) {  // qaat
-    change1 = 1;
+  if (voltage_avg2 <  5 && change5 == 0) {  // qaat
+    change1 = 0;
     change2 = 0;
     change3 = 0;
     change4 = 0;
@@ -39,7 +39,7 @@ void dynam_test() {
     tft.drawJpgFile(SD, "/sim_qat.jpg", 10, 80);
   }
 
-  if (voltage_avg2 < 12.9 && voltage_avg2 >= 9 && change1 == 0) {  // خاموش
+  if (voltage_avg2 < 12.8 && voltage_avg2 >= 5 && change1 == 0) {  // خاموش
     change1 = 1;
     change2 = 0;
     change3 = 0;
@@ -48,7 +48,7 @@ void dynam_test() {
     tft.drawJpgFile(SD, "/CAR_OFF.jpg", 10, 80);
   }
 
-  if (voltage_avg2 >= 12.9 && voltage_avg2 < 13.4 && change2 == 0) {  // ضعیف
+  if (voltage_avg2 >= 12.8 && voltage_avg2 < 13.4 && change2 == 0) {  // ضعیف
     change1 = 0;
     change2 = 1;
     change3 = 0;
@@ -57,7 +57,7 @@ void dynam_test() {
     tft.drawJpgFile(SD, "/DYNAM_PAEIN.jpg", 10, 80);
   }
 
-  if (voltage_avg2 >= 13.4 && voltage_avg2 <= 14.5 && change3 == 0) {  // نرمال
+  if (voltage_avg2 >= 13.4 && voltage_avg2 <= 14.7 && change3 == 0) {  // نرمال
     change1 = 0;
     change2 = 0;
     change3 = 1;
@@ -68,7 +68,7 @@ void dynam_test() {
 
 
 
-  if (voltage_avg2 > 14.5 && change4 == 0) {  // بالا
+  if (voltage_avg2 > 14.7 && change4 == 0) {  // بالا
     change1 = 0;
     change2 = 0;
     change3 = 0;
